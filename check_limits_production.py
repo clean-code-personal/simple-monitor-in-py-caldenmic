@@ -4,7 +4,7 @@ def update_status(attribute, lower_limit, upper_limit, abnormality, status):
     if (eval(attribute) < lower_limit):
         attribute_status[attribute] = 'low'
         abnormality = 1
-    else (eval(attribute) > upper_limit):
+    elif (eval(attribute) > upper_limit):
         attribute_status[attribute] = 'high'
         abnormality = 1
         
