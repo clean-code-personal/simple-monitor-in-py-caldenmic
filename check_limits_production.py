@@ -7,11 +7,11 @@ def battery_is_ok(temperature, soc, charge_rate, reporter=None):
     abnormality = 0
     
     for attribute, (lower_limit, upper_limit) in attribute_ranges.items():
-        if (eval(attribute) < lower_limit):
-            attribute_status[attribute] = 'low'
-            abnormality = 1
-        elif (eval(attribute) > upper_limit):
-            attribute_status[attribute] = 'high'
-            abnormality = 1
+#         if (eval(attribute) < lower_limit):
+#             attribute_status[attribute] = 'low'
+#             abnormality = 1
+#         elif (eval(attribute) > upper_limit):
+#             attribute_status[attribute] = 'high'
+#             abnormality = 1
     reporter(attribute_status, abnormality)
     return attribute_status
