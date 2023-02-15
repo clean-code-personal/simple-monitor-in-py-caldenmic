@@ -1,8 +1,4 @@
-name_mappings = {
-    'temperature': 'Temperature',
-    'soc': 'State of Charge', 
-    'charge_rate': 'Charge rate'
-}
+name_mappings = {'temperature': 'Temperature','soc': 'State of Charge', 'charge_rate': 'Charge rate'}
 
 def battery_is_ok(temperature, soc, charge_rate, reporter=None):
     attribute_ranges = {'temperature': (0, 45), 'soc': (20, 80), 'charge_rate': (0, 0.8)}
