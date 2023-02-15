@@ -29,3 +29,14 @@ def battery_is_ok(temperature, soc, charge_rate, reporter=None):
             # print(f'{attribute} is high!')
     reporter(attribute_status, abnormality)
     return attribute_status
+
+def battery_reporter(attribute_status, abnormality):
+    if not abnormality:
+        print("-----------------------------------")
+        print("Battery is working under optimal conditions")
+        print("-----------------------------------")
+    else:
+        print("-----------------------------------")
+        for attribute, status in attribute_status.items():
+            print(f'{name_mappings[attribute]} is {status}!')
+        print("-----------------------------------")
