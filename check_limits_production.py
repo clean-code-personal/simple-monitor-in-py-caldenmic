@@ -4,7 +4,7 @@ name_mappings = {
     'charge_rate': 'Charge rate'
 }
 
-def battery_is_ok(temperature, soc, charge_rate):
+def battery_is_ok(temperature, soc, charge_rate, reporter=None):
     attribute_ranges = {
         'temperature': (0, 45), 
         'soc': (20, 80), 
@@ -16,18 +16,16 @@ def battery_is_ok(temperature, soc, charge_rate):
         'charge_rate': 'normal'
     }
     
+    abnormality = 0
+    
     for attribute, (lower_limit, upper_limit) in attribute_ranges.items():
         if (eval(attribute) < lower_limit):
             attribute_status[attribute] = 'low'
+            abnormality = 1
             # print(f'{attribute} is low!')
         elif (eval(attribute) > upper_limit):
             attribute_status[attribute] = 'high'
+            abnormality = 1
             # print(f'{attribute} is high!')
-    battery_info(attribute_status)
+    reporter(attribute_status, abnormality)
     return attribute_status
-    
-def battery_info(attribute_status):
-    print("-----------------------------------")
-    for attribute, status in attribute_status.items():
-        print(f'{name_mappings[attribute]} is {status}!')
-    print("-----------------------------------")
