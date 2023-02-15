@@ -1,5 +1,5 @@
 import unittest
-from check_limits_production import battery_is_ok, name_mappings
+from check_limits_production import battery_is_ok, battery_reporter
 
 class TestBattery(unittest.TestCase):
     
