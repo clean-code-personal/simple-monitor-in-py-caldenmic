@@ -13,7 +13,7 @@ def battery_is_ok(temperature, soc, charge_rate, reporter=None):
     reporter(attribute_status, abnormality)
     return attribute_status
 
-def update_status(attribute, lower_limit, upper_limit, abnormality, status):
+def update_status(temperature, soc, charge_rate, attribute, lower_limit, upper_limit, abnormality, status):
     if (eval(attribute) < lower_limit):
         status[attribute] = 'low'
         abnormality = 1
