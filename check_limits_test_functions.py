@@ -9,5 +9,5 @@ class TestBattery(unittest.TestCase):
     def test_battery_is_ok_False(self, temperature, soc, charge_rate):
         self.assertFalse(battery_is_ok(temperature, soc, charge_rate))
         
-    def test_charge_rate_not_negative(self, charge_rate):
-        self.assertTrue(charge_rate !< 0)
+    def test_charge_rate_between_0_and_1(self, charge_rate):
+        self.assertTrue(charge_rate >= 0 and charge_rate <= 1)
