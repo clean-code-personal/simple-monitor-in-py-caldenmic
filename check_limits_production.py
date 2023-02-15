@@ -7,7 +7,7 @@ def battery_is_ok(temperature, soc, charge_rate, reporter=None):
     abnormality = 0
     
     for attribute, (lower_limit, upper_limit) in attribute_ranges.items():
-        update_status(attribute, lower_limit, upper_limit, abnormality, attribute_status)
+        update_status(temperature, soc, charge_rate, attribute, lower_limit, upper_limit, abnormality, attribute_status)
         
     print(abnormality)
     reporter(attribute_status, abnormality)
