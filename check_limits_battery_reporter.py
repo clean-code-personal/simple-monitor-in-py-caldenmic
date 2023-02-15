@@ -1,3 +1,5 @@
+from check_limits_production import name_mappings
+
 def battery_reporter(attribute_status, abnormality):
     if not abnormality:
         print("-------------------------------------------")
