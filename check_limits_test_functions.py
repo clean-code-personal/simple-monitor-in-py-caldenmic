@@ -1,17 +1,6 @@
 import unittest
 from check_limits_production import battery_is_ok, name_mappings
 
-def battery_reporter(attribute_status, abnormality):
-    if not abnormality:
-        print("-----------------------------------")
-        print("Battery is working under optimal conditions")
-        print("-----------------------------------")
-    else:
-        print("-----------------------------------")
-        for attribute, status in attribute_status.items():
-            print(f'{name_mappings[attribute]} is {status}!')
-        print("-----------------------------------")
-
 class TestBattery(unittest.TestCase):
     
     def test_battery_is_ok_status_all_attributes_normal(self, temperature, soc, charge_rate):
