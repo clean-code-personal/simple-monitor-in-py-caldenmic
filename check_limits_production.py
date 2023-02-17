@@ -26,10 +26,13 @@ class Battery:
 
     def update_attribute_status(self):
         for attribute, (lower_limit, upper_limit) in self.attribute_ranges.items():
-            if (eval('self.' + attribute) < lower_limit):
-                self.attribute_status[attribute] = 'low'
-            elif (eval('self.' +attribute) > upper_limit):
-                self.attribute_status[attribute] = 'high'
+            self.update_single_attribute_status(attribute, upper_limit, lower_limit)
+
+    def update_single_attribute_status(self, attribute, upper_limit, lower_limit):
+        if (eval('self.' + attribute) < lower_limit):
+            self.attribute_status[attribute] = 'low'
+        elif (eval('self.' +attribute) > upper_limit):
+            self.attribute_status[attribute] = 'high'
     
     def is_battery_okay(self):
         self.update_attribute_status()
