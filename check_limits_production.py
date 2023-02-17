@@ -50,6 +50,7 @@ class Battery:
         print(self.attribute_status)
 
     def display_abnormality_report(self):
+        self.update_attribute_status()
         reporter = Reporter(self.attribute_status)
         reporter.abnormality_report()
 
