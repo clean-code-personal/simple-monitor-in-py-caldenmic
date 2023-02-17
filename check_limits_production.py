@@ -1,5 +1,3 @@
-import ast
-
 class Reporter:
     def __init__(self, attribute_status):
         self.attribute_status = attribute_status
