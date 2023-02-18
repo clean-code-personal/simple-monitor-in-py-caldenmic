@@ -5,10 +5,14 @@ class Reporter:
         self.language_mappings = {
             'en': {'optimal': 'Battery working under optimal conditions!',
                     'low': '{attribute} is too low!',
-                    'high': '{attribute} is too high!'},
+                    'high': '{attribute} is too high!',
+                    'warning high': '{attribute} approaching high conditions!',
+                    'warning low': '{attribute} approaching low conditions!'},
             'fr': {'optimal': 'La batterie fonctionne dans des conditions optimales !',
                     'low': '{attribute} est trop bas !',
-                    'high': '{attribute} est trop élevé !'}
+                    'high': '{attribute} est trop élevé !',
+                    'warning high': '{attribute} approche des conditions élevées!',
+                    'warning low': '{attribute} approche des conditions basses!'}
         }
 
     def abnormality_report(self, language='en'):
@@ -39,10 +43,19 @@ class Battery:
             self.update_single_attribute_status(attribute, upper_limit, lower_limit)
 
     def update_single_attribute_status(self, attribute, upper_limit, lower_limit):
-        if (eval('self.' + attribute) < lower_limit):
+        warning_range = 0.05 * upper_limit
+        warning_upper_limit = upper_limit - warning_range
+        warning_lower_limit = lower_limit + warning_range
+        attribute_val = eval('self.' + attribute)
+
+        if (attribute_val < lower_limit):
             self.attribute_status[attribute] = 'low'
-        elif (eval('self.' +attribute) > upper_limit):
+        elif (attribute_val > upper_limit):
             self.attribute_status[attribute] = 'high'
+        elif (attribute_val >= warning_upper_limit):
+            self.attribute_status[attribute] = 'warning high'
+        elif (attribute_val <= warning_lower_limit):
+            self.attribute_status[attribute] = 'warning low'
 
     def is_battery_okay(self):
         self.update_attribute_status()
