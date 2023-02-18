@@ -15,7 +15,6 @@ class TestBattery(unittest.TestCase):
 
     def test_battery_is_okay(self):
         battery = Battery(40, 30, 0.7)
-        battery.display_abnormality_report()
         self.assertTrue(battery.is_battery_okay())
 
     def test_battery_is_not_okay(self):
@@ -23,7 +22,6 @@ class TestBattery(unittest.TestCase):
         
         for (temperature, soc, charge_rate) in param_list:
             battery = Battery(temperature, soc, charge_rate)
-            battery.display_abnormality_report()
             self.assertFalse(battery.is_battery_okay())
 
     def test_to_check_number_of_abnormalitites(self):
@@ -32,13 +30,24 @@ class TestBattery(unittest.TestCase):
 
         for (temperature, soc, charge_rate, expected_abnormality_number) in param_list_abnormality_number:
             battery = Battery(temperature, soc, charge_rate)
+            battery.display_abnormality_report()
             self.assertEqual(battery.number_of_abnormalities(), expected_abnormality_number)
 
     def test_battery_attribute_status(self):
         param_list = [((-10, 50, 0.5), {'temperature': 'low'}), ((50, 50, 0.5), {'temperature': 'high'}), ((25, 10, 0.5), {'soc': 'low'}), 
         ((25, 90, 0.5), {'soc': 'high'}), ((25, 50, -0.5), {'charge_rate': 'low'}), ((25, 50, 1.0), {'charge_rate': 'high'}), 
-        ((-10, 90, 0.7), {'temperature': 'low', 'soc': 'high'}), ((90, 14, -0.1), {'temperature': 'high', 'soc': 'low', 'charge_rate': 'low'}), 
+        ((-10, 90, 0.7), {'temperature': 'low', 'soc': 'high'}), ((90, 22, -0.1), {'temperature': 'high', 'soc': 'warning low', 'charge_rate': 'low'}), 
         ((65, 45, 0.98), {'temperature': 'high', 'charge_rate': 'high'})]
+
+        for ((temperature, soc, charge_rate), expected_attribute_status) in param_list:
+            battery = Battery(temperature, soc, charge_rate)
+            status = battery.get_attribute_satatus()
+            self.assertEqual(status, expected_attribute_status)
+
+    def test_warning_attribute_ranges(self):
+        param_list = [((2, 30, 0.7), {'temperature': 'warning low'}), ((44, 30, 0.7), {'temperature': 'warning high'}), 
+        ((40, 22, 0.7), {'soc': 'warning low'}), ((30, 77, 0.7), {'soc': 'warning high'}), ((40, 30, 0.03), {'charge_rate': 'warning low'}),
+        ((40, 30, 0.79), {'charge_rate': 'warning high'})]
 
         for ((temperature, soc, charge_rate), expected_attribute_status) in param_list:
             battery = Battery(temperature, soc, charge_rate)
