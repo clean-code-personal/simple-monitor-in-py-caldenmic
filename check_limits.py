@@ -15,6 +15,7 @@ class TestBattery(unittest.TestCase):
 
     def test_battery_is_okay(self):
         battery = Battery(40, 30, 0.7)
+        battery.display_abnormality_report()
         self.assertTrue(battery.is_battery_okay())
 
     def test_battery_is_not_okay(self):
@@ -22,6 +23,7 @@ class TestBattery(unittest.TestCase):
         
         for (temperature, soc, charge_rate) in param_list:
             battery = Battery(temperature, soc, charge_rate)
+            battery.display_abnormality_report()
             self.assertFalse(battery.is_battery_okay())
 
     def test_to_check_number_of_abnormalitites(self):
