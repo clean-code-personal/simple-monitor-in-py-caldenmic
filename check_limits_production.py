@@ -48,6 +48,7 @@ class Battery:
         warning_lower_limit = lower_limit + warning_range
         attribute_val = eval('self.' + attribute)
 
+        #Look at the cyclomatic complexity
         if (attribute_val < lower_limit):
             self.attribute_status[attribute] = 'low'
         elif (attribute_val > upper_limit):
