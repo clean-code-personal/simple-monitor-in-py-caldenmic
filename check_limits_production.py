@@ -43,17 +43,21 @@ class Battery:
             self.update_single_attribute_status(attribute, upper_limit, lower_limit)
 
     def update_single_attribute_status(self, attribute, upper_limit, lower_limit):
-        warning_range = 0.05 * upper_limit
-        warning_upper_limit = upper_limit - warning_range
-        warning_lower_limit = lower_limit + warning_range
         attribute_val = eval('self.' + attribute)
 
-        #Look at the cyclomatic complexity
         if (attribute_val < lower_limit):
             self.attribute_status[attribute] = 'low'
         elif (attribute_val > upper_limit):
             self.attribute_status[attribute] = 'high'
-        elif (attribute_val >= warning_upper_limit):
+        else:
+            self.calculate_warning_attribute_status(attribute, upper_limit, lower_limit, attribute_val)
+
+    def calculate_warning_attribute_status(self, attribute, upper_limit, lower_limit, attribute_val):
+        warning_range = 0.05 * upper_limit
+        warning_upper_limit = upper_limit - warning_range
+        warning_lower_limit = lower_limit + warning_range
+
+        if (attribute_val >= warning_upper_limit):
             self.attribute_status[attribute] = 'warning high'
         elif (attribute_val <= warning_lower_limit):
             self.attribute_status[attribute] = 'warning low'
