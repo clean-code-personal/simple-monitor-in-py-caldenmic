@@ -60,4 +60,4 @@ Shorten the Semantic distance
 # Extensions
 
 1. Early Warning
-2. Multiple language support for printing statements
+2. Support a language in addition to English (Here in this code "French" is the additional language)
