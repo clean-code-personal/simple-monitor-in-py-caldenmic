@@ -48,8 +48,10 @@ class Battery:
 
         if (attribute_val < lower_limit):
             self.attribute_status[attribute] = 'low'
+            return
         elif (attribute_val > upper_limit):
             self.attribute_status[attribute] = 'high'
+            return
         elif self.attribute_warning_required[attribute]:
             self.calculate_warning_attribute_status(attribute, upper_limit, lower_limit, attribute_val)
 
