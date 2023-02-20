@@ -1,18 +1,58 @@
+import unittest
+from check_limits_production import Battery
 
-def battery_is_ok(temperature, soc, charge_rate):
-  if temperature < 0 or temperature > 45:
-    print('Temperature is out of range!')
-    return False
-  elif soc < 20 or soc > 80:
-    print('State of Charge is out of range!')
-    return False
-  elif charge_rate > 0.8:
-    print('Charge rate is out of range!')
-    return False
+class TestBattery(unittest.TestCase):
 
-  return True
+    def assertHigh(self, battery, attribute):
+        status = battery.get_attribute_satatus()
+        if attribute in status.keys():
+            self.assertEqual(status[attribute], 'high')
 
+    def assertLow(self, battery, attribute):
+        status = battery.get_attribute_satatus()
+        if attribute in status.keys():
+            self.assertEqual(status[attribute], 'low')
+
+    def test_battery_is_okay(self):
+        battery = Battery(40, 30, 0.7)
+        self.assertTrue(battery.is_battery_okay())
+
+    def test_battery_is_not_okay(self):
+        param_list = [(50, 30, 0.7), (30, 90, 0.5), (30, 50, 0.95), (50, 90, 0.7), (50, 30, 0.90), (40, 90, 0.98), (50, 90, 0.94)]
+        
+        for (temperature, soc, charge_rate) in param_list:
+            battery = Battery(temperature, soc, charge_rate)
+            self.assertFalse(battery.is_battery_okay())
+
+    def test_to_check_number_of_abnormalitites(self):
+        param_list_abnormality_number = [(50, 30, 0.7, 1), (30, 90, 0.5, 1), (30, 50, 0.95, 1), (50, 90, 0.7, 2), 
+        (50, 30, 0.90, 2), (40, 90, 0.98, 2), (50, 90, 0.94, 3)]
+
+        for (temperature, soc, charge_rate, expected_abnormality_number) in param_list_abnormality_number:
+            battery = Battery(temperature, soc, charge_rate)
+            battery.display_abnormality_report()
+            self.assertEqual(battery.number_of_abnormalities(), expected_abnormality_number)
+
+    def test_battery_attribute_status(self):
+        param_list = [((-10, 50, 0.5), {'temperature': 'low'}), ((50, 50, 0.5), {'temperature': 'high'}), ((25, 10, 0.5), {'soc': 'low'}), 
+        ((25, 90, 0.5), {'soc': 'high'}), ((25, 50, -0.5), {'charge_rate': 'low'}), ((25, 50, 1.0), {'charge_rate': 'high'}), 
+        ((-10, 90, 0.7), {'temperature': 'low', 'soc': 'high'}), ((90, 22, -0.1), {'temperature': 'high', 'soc': 'warning low', 'charge_rate': 'low'}), 
+        ((65, 45, 0.98), {'temperature': 'high', 'charge_rate': 'high'})]
+
+        for ((temperature, soc, charge_rate), expected_attribute_status) in param_list:
+            battery = Battery(temperature, soc, charge_rate)
+            status = battery.get_attribute_satatus()
+            self.assertEqual(status, expected_attribute_status)
+
+    def test_warning_attribute_ranges(self):
+        param_list = [((2, 30, 0.7), {'temperature': 'warning low'}), ((44, 30, 0.7), {'temperature': 'warning high'}), 
+        ((40, 22, 0.7), {'soc': 'warning low'}), ((30, 77, 0.7), {'soc': 'warning high'}), ((40, 30, 0.03), {'charge_rate': 'warning low'}),
+        ((40, 30, 0.79), {'charge_rate': 'warning high'})]
+
+        for ((temperature, soc, charge_rate), expected_attribute_status) in param_list:
+            battery = Battery(temperature, soc, charge_rate)
+            status = battery.get_attribute_satatus()
+            self.assertEqual(status, expected_attribute_status)
 
 if __name__ == '__main__':
-  assert(battery_is_ok(25, 70, 0.7) is True)
-  assert(battery_is_ok(50, 85, 0) is False)
+    unittest.main()
