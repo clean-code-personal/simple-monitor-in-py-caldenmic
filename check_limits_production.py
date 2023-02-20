@@ -36,6 +36,7 @@ class Battery:
         self.soc = soc
         self.charge_rate = charge_rate
         self.attribute_ranges = {'temperature': (0, 45), 'soc': (20, 80), 'charge_rate': (0, 0.8)}
+        self.attribute_warning_required = {'temperature': 1, 'soc': 1, 'charge_rate': 1}
         self.attribute_status = {}
 
     def update_attribute_status(self):
@@ -49,7 +50,7 @@ class Battery:
             self.attribute_status[attribute] = 'low'
         elif (attribute_val > upper_limit):
             self.attribute_status[attribute] = 'high'
-        else:
+        elif self.attribute_warning_required[attribute]:
             self.calculate_warning_attribute_status(attribute, upper_limit, lower_limit, attribute_val)
 
     def calculate_warning_attribute_status(self, attribute, upper_limit, lower_limit, attribute_val):
